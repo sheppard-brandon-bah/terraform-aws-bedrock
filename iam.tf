@@ -11,6 +11,7 @@ resource "aws_iam_role" "agent_role" {
   count              = var.create_agent || var.create_supervisor ? 1 : 0
   assume_role_policy = data.aws_iam_policy_document.agent_trust[0].json
   name_prefix        = var.name_prefix
+  permissions_boundary = "arn:aws:iam::${local.account_id}:policy/Deny_Default_VPC"
 }
 
 resource "aws_iam_role_policy" "agent_policy" {
@@ -48,6 +49,7 @@ resource "aws_iam_role" "bedrock_knowledge_base_role" {
       }
     ]
   })
+  permissions_boundary = "arn:aws:iam::${local.account_id}:policy/Deny_Default_VPC"
 }
 
 # Attach a policy to allow necessary permissions for the Bedrock Knowledge Base
@@ -132,7 +134,7 @@ resource "aws_iam_policy" "bedrock_kb_s3_decryption_policy" {
 
 # Attach the policies to the role
 resource "aws_iam_role_policy_attachment" "bedrock_knowledge_base_policy_attachment" {
-  count      = var.kb_role_arn != null || local.create_kb == false || var.create_kendra_config == true ? 0 : 1
+  count      = var.kb_role_arn != null || var.create_default_kb == false || var.create_kendra_config == true ? 0 : 1
   role       = aws_iam_role.bedrock_knowledge_base_role[0].name
   policy_arn = aws_iam_policy.bedrock_knowledge_base_policy[0].arn
 }
@@ -270,6 +272,7 @@ resource "aws_iam_role" "application_inference_profile_role" {
       }
     ]
   })
+  permissions_boundary = "arn:aws:iam::${local.account_id}:policy/Deny_Default_VPC"
 }
 
 resource "aws_iam_role_policy" "app_inference_profile_policy" {
@@ -315,6 +318,7 @@ resource "aws_iam_role" "custom_model_role" {
   count              = var.create_custom_model ? 1 : 0
   assume_role_policy = data.aws_iam_policy_document.custom_model_trust[0].json
   name_prefix        = "CustomModelRole"
+  permissions_boundary = "arn:aws:iam::${local.account_id}:policy/Deny_Default_VPC"
 }
 
 resource "aws_iam_role_policy" "custom_model_policy" {

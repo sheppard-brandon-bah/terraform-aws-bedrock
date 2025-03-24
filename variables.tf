@@ -189,7 +189,7 @@ variable "create_agent_alias" {
 }
 
 variable "agent_alias_name" {
-  description = "The name of the guardrail."
+  description = "The name of the alias."
   type        = string
   default     = "TerraformBedrockAgentAlias"
 }
@@ -401,6 +401,12 @@ variable "guardrail_kms_key_arn" {
 
 
 # – Knowledge Base –
+
+variable "use_existing_kb" {
+  description = "use an existing knowledge base."
+  type        = bool
+  default     = false
+}
 
 variable "existing_kb" {
   description = "The ID of the existing knowledge base."

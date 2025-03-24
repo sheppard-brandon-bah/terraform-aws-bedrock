@@ -7,7 +7,7 @@ resource "random_string" "solution_prefix" {
 # – Bedrock Agent –
 
 locals {
-  counter_kb = local.create_kb ? [1] : []
+  counter_kb = local.create_kb || var.use_existing_kb ? [1] : []
   knowledge_base_id = local.create_kb ? (var.create_default_kb ? awscc_bedrock_knowledge_base.knowledge_base_default[0].id : (var.create_mongo_config ? awscc_bedrock_knowledge_base.knowledge_base_mongo[0].id : (var.create_opensearch_config ? awscc_bedrock_knowledge_base.knowledge_base_opensearch[0].id : (var.create_pinecone_config ? awscc_bedrock_knowledge_base.knowledge_base_pinecone[0].id : (var.create_rds_config ? awscc_bedrock_knowledge_base.knowledge_base_rds[0].id : null))))) : null
   knowledge_bases_value = {
     description          = var.kb_description
