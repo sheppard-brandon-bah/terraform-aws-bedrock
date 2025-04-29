@@ -83,3 +83,8 @@ output "knowledge_base_role_name" {
   description = "The name of the IAM role used by the knowledge base."
   value       = try(aws_iam_role.bedrock_knowledge_base_role[0].name, null)
 }
+
+output "agent_alias" {
+  description = "The agent alias info if created."
+  value       = var.create_agent_alias == true ? awscc_bedrock_agent_alias.bedrock_agent_alias : null
+}
